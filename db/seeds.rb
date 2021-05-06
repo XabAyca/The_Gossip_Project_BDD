@@ -13,6 +13,7 @@ JoinTableTagGossip.destroy_all
 Comment.destroy_all
 Like.destroy_all
 PrivateMessage.destroy_all
+JoinTablePmRecipient.destroy_all
 
 
 10.times do |i|
@@ -70,9 +71,13 @@ end
 
 puts "*"*20
 
-5.times do |i|
-  PrivateMessage.create(content:Faker::Movies::Lebowski.quote,sender_id:User.all.sample.id,recipient_id:User.all.sample.id)
-  puts "New message send, consult your mailbox..."
+10.times do |i|
+  pm = PrivateMessage.create(content:Faker::Movies::Lebowski.quote,sender_id:User.all.sample.id)
+  group = rand(1..3)
+  group.times do |u|
+    JoinTablePmRecipient.create(private_message:pm,recipient_id:User.all.sample.id)
+  end
+  puts "One New message send, to #{group} personn..."
 end
 
 puts "*"*20
